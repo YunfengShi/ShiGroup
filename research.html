@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research · Shi Group</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<section class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">Research</div>
+    <h1>Atomic-scale mechanisms, macroscopic consequences</h1>
+    <p>Our overarching goal is to use advanced molecular simulation to understand complex materials behavior at the atomic level. We then use that understanding to design new synthesis routes, microstructures and devices.</p>
+    <nav class="toc" id="toc"></nav>
+  </div>
+</section>
+
+<div class="wrap" id="sections"></div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><div class="eyebrow">Toolbox</div><h2>How we work</h2></div></div>
+    <div class="methods">
+      <div class="method reveal"><h4>Molecular dynamics</h4><p>Large-scale and accelerated MD of deformation, fracture, wear, growth and transport.</p></div>
+      <div class="method reveal"><h4>In-silico synthesis</h4><p>Simulated casting, quenching and consolidation, so that model materials carry realistic processing histories.</p></div>
+      <div class="method reveal"><h4>Reactive force fields</h4><p>Minimalist two-body reactive potentials that we develop in-house for polymers, oxides and perovskites.</p></div>
+      <div class="method reveal"><h4>ML &amp; quantum optimization</h4><p>Surrogate models and quantum algorithms for searching combinatorial design spaces.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><div class="eyebrow">Support</div><h2>Funding</h2></div>
+      <p>We gratefully acknowledge support from the National Science Foundation, the Department of Energy (including the Genesis program), the Air Force Office of Scientific Research, IBM, Corning Inc., and the Advanced Energy Consortium.</p></div>
+  </div>
+</section>
+
+<script src="data/themes.js"></script>
+<script src="data/publications.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  document.getElementById("toc").innerHTML = THEMES.map(t => `<a class="chip" href="#${t.id}">${t.title}</a>`).join("");
+  document.getElementById("sections").innerHTML = THEMES.map((t, i) => {
+    const refs = t.refs.map(r => PUBLICATIONS.find(p => p.title.toLowerCase().includes(r.toLowerCase()))).filter(Boolean).slice(0, 5);
+    return `<article class="rs" id="${t.id}">
+      <figure class="rs-fig reveal"><div class="rs-img${t.img.endsWith(".svg") ? "" : " fig"}"><img src="${t.img}" alt="${t.title}" loading="lazy"></div>${t.caption ? `<figcaption>${t.caption}</figcaption>` : ""}</figure>
+      <div class="reveal">
+        <div class="eyebrow">0${i + 1}</div>
+        <h2>${t.title}</h2>
+        ${t.body.map(b => `<p>${b}</p>`).join("")}
+        ${refs.length ? `<ul class="refs">${refs.map(p => `<li><span>${p.journal} ${p.year}</span><a href="${Site.paperLink(p)}" target="_blank" rel="noopener">${p.title}</a></li>`).join("")}</ul>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+  observeReveal();
+  if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+</script>
+</body>
+</html>

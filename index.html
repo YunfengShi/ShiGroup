@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shi Group · Molecular Simulation of Materials · RPI</title>
+<meta name="description" content="The Shi Group at Rensselaer Polytechnic Institute uses molecular simulation to understand and design materials, from tough glasses to 2D-material-enabled epitaxy.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="has-hero">
+
+<section class="hero">
+  <canvas id="md" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="eyebrow">Shi Research Group · Rensselaer Polytechnic Institute</div>
+      <h1>Computational <em>Materials Science</em></h1>
+      <p class="lede">We use molecular simulation to explain how materials deform, fracture, grow and react at the atomic scale, then turn those insights into designing tougher glasses, new thin-film growth routes and better devices.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="research.html">Explore our research</a>
+        <a class="btn btn-ghost" href="join.html">Join the group</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-ctrl">
+    <label for="sigLike"><span>A–A / B–B σ</span><output id="sigOut">1.50</output></label>
+    <input type="range" id="sigLike" min="0.8" max="2.0" step="0.05" value="1.5" aria-label="A-A and B-B sigma">
+    <div class="ctrl-ends"><span>compact<br>clusters</span><span style="text-align:right">linear<br>chains</span></div>
+    <label for="tempK" style="margin-top:12px"><span>Temperature T</span><output id="tempOut">0.20</output></label>
+    <input type="range" id="tempK" min="0.02" max="0.5" step="0.01" value="0.2" aria-label="Temperature">
+    <a class="ctrl-more" href="model.html" target="_blank" rel="noopener">Learn more about this model ↗</a>
+  </div>
+  <div class="hero-hint">Live MD · binary Lennard-Jones mixture, ~1,000 atoms · your cursor is a local heater</div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">Research</div><h2>What we work on</h2></div>
+      <p>Our tools are molecular dynamics, reactive force fields we develop ourselves, and increasingly machine learning and quantum optimization. We pick problems where atomic-scale mechanisms decide macroscopic behavior.</p>
+    </div>
+    <div class="themes" id="themes"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">Selected work</div><h2>Recent highlights</h2></div>
+      <a class="link-arrow" href="publications.html">All publications</a>
+    </div>
+    <div class="papers" id="featured"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">News</div>
+      <h2>Latest from the group</h2>
+      <p class="muted">Papers, defenses, new members and talks.</p>
+      <a class="link-arrow" href="news.html">All news</a>
+    </div>
+    <ul class="news-list" id="news"></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="eyebrow">Prospective students</div>
+      <h2>Curious how materials work at the atomic scale?</h2>
+      <p>We welcome Ph.D., M.S. and undergraduate researchers who enjoy physics, programming and asking why. No prior simulation experience is required.</p>
+      <div class="hero-cta"><a class="btn btn-primary" href="join.html">How to join</a><a class="btn btn-ghost" href="people.html">Meet the group</a></div>
+    </div>
+  </div>
+</section>
+
+<script src="data/themes.js"></script>
+<script src="data/publications.js"></script>
+<script src="data/news.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  startHero(document.getElementById("md"));
+  const sl = document.getElementById("sigLike"), so = document.getElementById("sigOut");
+  sl.addEventListener("input", () => { const v = +sl.value; so.textContent = v.toFixed(2); window.heroSetLikeSigma && heroSetLikeSigma(v); });
+  const tl = document.getElementById("tempK"), to = document.getElementById("tempOut");
+  tl.addEventListener("input", () => { const v = +tl.value; to.textContent = v.toFixed(2); window.heroSetTemperature && heroSetTemperature(v); });
+  document.getElementById("themes").innerHTML = THEMES.map((t, i) => `
+    <a class="theme reveal" href="research.html#${t.id}">
+      <div class="theme-img${t.img.endsWith(".svg") ? "" : " fig"}"><img src="${t.img}" alt="" loading="lazy"></div>
+      <div class="theme-body"><div class="num">0${i + 1}</div><h3>${t.title}</h3><p>${t.short}</p></div>
+    </a>`).join("");
+  const feat = PUBLICATIONS.filter(p => p.featured && p.year >= 2018).slice(0, 6);
+  feat.sort((a, b) => (b.img ? 1 : 0) - (a.img ? 1 : 0));
+  document.getElementById("featured").innerHTML = feat.map(p => `
+    <a class="paper-card reveal${p.img ? " has-img" : ""}" href="${Site.paperLink(p)}" target="_blank" rel="noopener">
+      ${p.img ? `<div class="thumb"${p.imgBg ? ` style="background:${p.imgBg}"` : ""}><img src="${p.img}" alt="" loading="lazy"></div><div class="pc-body">` : ""}
+      <div class="yr">${p.year}</div>
+      <div><div class="jr">${p.journal}</div><h4>${p.title}</h4></div>
+      ${p.img ? "</div>" : ""}
+    </a>`).join("");
+  document.getElementById("news").innerHTML = NEWS.slice(0, 5).map(Site.newsItem).join("");
+  observeReveal();
+</script>
+</body>
+</html>

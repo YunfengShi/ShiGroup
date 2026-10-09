@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publications · Shi Group</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<section class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">Publications</div>
+    <h1>Papers</h1>
+    <p>More than 110 peer-reviewed papers, including in Science, Nature, Nature Materials, Nature Nanotechnology, PNAS and Physical Review Letters. <sup>*</sup> marks a corresponding author.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:36px">
+  <div class="wrap">
+    <div class="pub-tools">
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search titles, authors, journals…" aria-label="Search publications"></label>
+      <button class="chip" id="hl" aria-pressed="false">Highlights only</button>
+    </div>
+    <div class="toc" id="filters" style="margin:12px 0 8px"></div>
+    <div class="pub-count" id="count"></div>
+    <div id="list"></div>
+  </div>
+</section>
+
+<script src="data/publications.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  const TAGS = { all: "All", glass: "Glasses & fracture", interfaces: "2D materials & epitaxy", polymers: "Polymers & force fields",
+    energy: "Energy", tribology: "Wear & tribology", active: "Nanomotors & self-assembly", carbon: "Nanoporous carbon", shock: "Shock & detonation", data: "ML & data" };
+  let tag = "all", hlOnly = false, q = "";
+  const filters = document.getElementById("filters");
+  filters.innerHTML = Object.entries(TAGS).map(([k, v]) => `<button class="chip" data-t="${k}" aria-pressed="${k === "all"}">${v}</button>`).join("");
+  filters.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; tag = b.dataset.t;
+    filters.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); });
+  document.getElementById("hl").addEventListener("click", e => { hlOnly = !hlOnly; e.currentTarget.setAttribute("aria-pressed", hlOnly); render(); });
+  document.getElementById("q").addEventListener("input", e => { q = e.target.value.toLowerCase(); render(); });
+  const strip = s => s.replace(/<[^>]+>/g, "");
+
+  function render() {
+    const L = PUBLICATIONS.filter(p => (tag === "all" || p.tags.includes(tag)) && (!hlOnly || p.featured) &&
+      (!q || (p.title + strip(p.authors) + p.journal + p.year).toLowerCase().includes(q)));
+    document.getElementById("count").textContent = `${L.length} ${L.length === 1 ? "publication" : "publications"}`;
+    const byYear = {};
+    L.forEach(p => (byYear[p.year] ||= []).push(p));
+    document.getElementById("list").innerHTML = Object.keys(byYear).sort((a, b) => b - a).map(y => `
+      <div class="pub-year"><h3>${y}</h3><div>${byYear[y].map(p => `
+        <div class="pub">
+          <div class="pub-title"><a href="${Site.paperLink(p)}" target="_blank" rel="noopener">${p.title}</a>
+            ${p.featured ? '<span class="badge hl">Highlight</span>' : ""}
+            ${p.type !== "journal" ? `<span class="badge soft">${p.type}</span>` : ""}
+            ${p.note ? `<span class="badge soft">${p.note}</span>` : ""}</div>
+          <div class="pub-authors">${Site.boldPI(p.authors)}</div>
+          <div class="pub-venue"><i>${p.journal}</i>${p.details ? ", " + p.details : ""}</div>
+          ${p.news.length ? `<div class="pub-links">${p.news.map((n, i) => `<a href="${n}" target="_blank" rel="noopener">In the news${p.news.length > 1 ? " " + (i + 1) : ""} ↗</a>`).join("")}</div>` : ""}
+        </div>`).join("")}</div></div>`).join("") || '<p class="muted" style="padding:40px 0">No matching publications.</p>';
+  }
+  render();
+</script>
+</body>
+</html>

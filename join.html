@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join Us · Shi Group</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<section class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">Join us</div>
+    <h1>Work with us</h1>
+    <p>We look for students who enjoy physics, are comfortable writing code (or want to learn) and care about mechanisms. No prior simulation experience is needed.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <div class="prose">
+      <h3>Prospective Ph.D. students</h3>
+      <p>Apply to the Ph.D. program in Materials Science and Engineering at Rensselaer and mention the Shi Group in your statement. You are welcome to email Prof. Shi with your CV and a short note on which of our <a href="research.html">research directions</a> interests you.</p>
+      <h3>M.S. students</h3>
+      <p>M.S. students in MSE can do a thesis or project in the group. Please get in touch early in your first semester.</p>
+      <h3>RPI undergraduates</h3>
+      <p>A dozen undergraduates have done research in the group, through independent study, URP or summer projects. Some programming experience helps, but curiosity matters more.</p>
+      <h3>Program questions</h3>
+      <p>Prof. Shi is also the Graduate Program Director for MSE and can answer questions about the M.S. and Ph.D. programs.</p>
+    </div>
+    <div class="contact-card reveal">
+      <div class="eyebrow">Contact</div>
+      <dl id="contact"></dl>
+    </div>
+  </div>
+</section>
+
+<script src="data/people.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  const pi = PEOPLE.pi;
+  document.getElementById("contact").innerHTML = `
+    <dt>PI</dt><dd>Prof. Yunfeng Shi</dd>
+    <dt>Email</dt><dd>${pi.email ? `<a href="mailto:${pi.email}">${pi.email}</a>` : '<span class="todo">add in data/people.js</span>'}</dd>
+    <dt>Office</dt><dd>${pi.office || '<span class="todo">add in data/people.js</span>'}</dd>
+    <dt>Address</dt><dd>Department of Materials Science and Engineering<br>Rensselaer Polytechnic Institute<br>110 8th Street, Troy, NY 12180</dd>`;
+</script>
+</body>
+</html>

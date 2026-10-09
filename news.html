@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News · Shi Group</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<section class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">News</div>
+    <h1>Group news</h1>
+    <p>New papers, defenses, awards, talks and people.</p>
+  </div>
+</section>
+<section class="section" style="padding-top:40px">
+  <div class="wrap">
+    <div class="toc" id="filters" style="margin:0 0 24px"></div>
+    <ul class="news-list" id="news"></ul>
+  </div>
+</section>
+<script src="data/news.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  const tags = ["All", ...new Set(NEWS.map(n => n.tag))];
+  const f = document.getElementById("filters");
+  f.innerHTML = tags.map(t => `<button class="chip" data-t="${t}" aria-pressed="${t === "All"}">${t}</button>`).join("");
+  const render = t => { document.getElementById("news").innerHTML = NEWS.filter(n => t === "All" || n.tag === t).map(Site.newsItem).join(""); observeReveal(); };
+  f.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; f.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); render(b.dataset.t); });
+  render("All");
+</script>
+</body>
+</html>

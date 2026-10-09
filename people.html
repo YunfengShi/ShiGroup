@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People · Shi Group</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<section class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">People</div>
+    <h1>The group</h1>
+    <p>Current members, alumni, and where our graduates have gone.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap pi" id="pi"></div>
+</section>
+
+<section class="section" style="padding-top:0;border-top:0">
+  <div class="wrap">
+    <figure class="group-photo reveal"><img src="assets/img/group.jpg" alt="Shi Group members and colleagues" loading="lazy"><figcaption>The Shi Group</figcaption></figure>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><div class="eyebrow">Current members</div><h2>Graduate students</h2></div></div>
+    <div class="members" id="current"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><div class="eyebrow">Alumni</div><h2>Graduates &amp; postdocs</h2></div>
+      <p>Our alumni have gone on to Apple, Corning, Meta, Google, Amazon, Tesla, GE Vernova, Copeland and Newport News Shipbuilding, and to faculty and research positions at National Cheng Kung University, Penn State, Huazhong University of Science and Technology, UIUC, the University of Nevada, Reno and KIST.</p></div>
+    <table class="alumni"><thead><tr><th>Name</th><th>Degree</th><th>Thesis</th><th>Next</th></tr></thead><tbody id="alumni"></tbody></table>
+  </div>
+</section>
+
+<script src="data/people.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  const pi = PEOPLE.pi;
+  document.getElementById("pi").innerHTML = `
+    <div>${Site.avatar(pi)}
+      <ul class="pi-meta">
+        ${pi.email ? `<li><span>Email</span><a href="mailto:${pi.email}">${pi.email}</a></li>` : ""}
+        ${pi.office ? `<li><span>Office</span><span>${pi.office}</span></li>` : ""}
+        ${pi.scholar ? `<li><span>Scholar</span><a href="${pi.scholar}" target="_blank" rel="noopener">Google Scholar</a></li>` : ""}
+        ${pi.cv ? `<li><span>CV</span><a href="${pi.cv}">Download (PDF)</a></li>` : ""}
+      </ul></div>
+    <div>
+      <div class="eyebrow">Principal investigator</div>
+      <h2>${pi.name}</h2>
+      <p class="muted" style="margin-top:-6px">${pi.role}</p>
+      ${pi.bio.map(b => `<p>${b}</p>`).join("")}
+    </div>`;
+  document.getElementById("current").innerHTML = PEOPLE.current.map(m => `
+    <div class="member reveal">
+      <h4>${m.name}</h4><div class="role">${m.role}</div>
+      ${m.topic ? `<div class="topic">${m.topic}</div>` : ""}
+      ${m.note ? `<div class="role" style="font-size:.8rem">${m.note}</div>` : ""}
+      ${m.since ? `<div class="since">Joined ${m.since}</div>` : ""}
+    </div>`).join("") + `<a class="member join reveal" href="join.html"><h4>Join us</h4><div class="role">We're looking for curious students →</div></a>`;
+  document.getElementById("alumni").innerHTML = PEOPLE.alumni.map(a => `
+    <tr><td class="name">${a.name}</td>
+      <td>${a.degree}${a.year ? `, ${a.year}` : ""}${a.note ? `<div class="thesis">${a.note}</div>` : ""}</td>
+      <td class="thesis">${a.thesis ? `“${a.thesis}”` : ""}</td>
+      <td>${a.now || '<span class="muted">—</span>'}</td></tr>`).join("");
+  observeReveal();
+</script>
+</body>
+</html>
