@@ -269,6 +269,7 @@ p { margin: 0 0 1em; }
 .course .code { font: 500 .78rem var(--font-mono); color: var(--accent); letter-spacing: .06em; }
 .course h4 { font: 600 1.08rem var(--font-display); margin: 6px 0 6px; }
 .course p { color: var(--muted); font-size: .9rem; margin: 0; }
+.course .link-arrow { display: inline-block; margin-top: 12px; }
 .prose { max-width: 720px; }
 .prose p, .prose li { font-size: 1.05rem; }
 .contact-card { padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
